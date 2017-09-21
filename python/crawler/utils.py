@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 Episode = namedtuple('Episode', ['no', 'img_url', 'title', 'rating', 'created_date'])
 webtoon_p = 696617
+webtoon_g = 557672
 
 def get_webtoon_episode_list(webtoon_id, page=1):
     """

@@ -139,5 +139,54 @@ class NaverWebtoonCrawler():
                 print('불러올 파일이 없습니다')
 
 
+    def make_list_html(self):
+        """
+        self.episode_list를 HTML파일로 만들어준다
+        webtoon/<webtoon_id>.html
+        
+        1. webtoon 폴더가 있는지 검사 후 생성
+        2. webtoon/<webtoon_id>.html 파일객체 할당 또는 with 문으로 open
+        3. open한 파일에 HTML 앞부분 작성
+        4. episode_list를 for문 돌며 <tr>...</tr> 부분 반복 작성
+        5. HTML 뒷부분 작성
+        6. 파일 닫기 또는 with 문으로 빠져나가기
+        7. 해당 파일 경로 리턴
+        <html>
+        <head>
+            <meta charset="utf-8">
+        </head>
+        <body>
+            <table>
+                <tr>
+                    <!-- 이 부분을 episode_list의 길이만큼 반복 --!>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+        :return: 
+        """"""
+        """
+        if not os.path.isdir('webtoon'):
+            os.mkdir('webtoon')
+
+        path = 'webtoon/{}.html',format(self.webtoon_id)
+        with open(path, 'wb') as f:
+            f.write(
+            <html>
+            <head>
+                <meta charset = "utf-8" >
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        for
+                    </tr>
+                </table>
+            </body>
+            </html>
+            )
+        return path
+
+
+
 nwc = NaverWebtoonCrawler(696617)
 print(nwc.episode_list)
