@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  section {
+    border: 5px solid black;
+    margin-bottom: 20px;
+  }
+  section.adjacent > h1 + ul {
+    background-color: LightBlue;
+    color: DarkBlue;
+  }
+  section.general > h1 ~ ul {
+    background-color: LightBlue;
+    color: DarkBlue;
+  }
+</style>
+<body>
+  <section class="adjacent">
+    <ul>
+      <li>List1-Item1</li>
+      <li>List1-Item2</li>
+    </ul>
+    <h1>Adjacent</h1>
+    <ul>
+      <li>List2-Item1</li>
+      <li>List2-Item2</li>
+    </ul>
+    <ul>
+      <li>List3-Item1</li>
+      <li>List3-Item2</li>
+    </ul>
+  </section>
+  <section class="general">
+    <ul>
+      <li>List1-Item1</li>
+      <li>List1-Item2</li>
+    </ul>
+    <h1>General</h1>
+    <ul class="list2">
+      <li>List2-Item1</li>
+      <li>List2-Item2</li>
+    </ul>
+    <ul class="list3">
+      <li>List3-Item1</li>
+      <li>List3-Item2</li>
+    </ul>
+  </section>
+</body>
+</html>

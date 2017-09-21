@@ -1,0 +1,24 @@
+-bdrs: border radius
+-super-foo: super-foo
+-trf: transform
+
+only webkit and moz?
+  -wm-trf
+
+w: webkit
+m: moz
+s: ms
+o: o
+
+
+------------------------
+
+lg(left, #fc0 30%, red)
+background-image: -webkit-linear-gradient(left, #fc0 50%, blue);
+background-image: -o-linear-gradient(left, #fc0 30%, red);
+background-image: linear-gradient(to right, #fc0 30%, red);
+
+------------------------
+
+ov-h or ovh or oh
+overflow: hidden;

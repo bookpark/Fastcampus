@@ -1,0 +1,482 @@
+$color-text-anchor: #585858;
+$color-bg-main-search: #cbd5c4;
+$color-bg-main-search-btn: #3b8de0;
+$color-bg-main-search-btn-hover: #2074c8;
+$color-bg-banner-event-1: #065cbd;
+$length-header-height: 61px;
+
+html, body {
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: $color-text-anchor;
+}
+ul, ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.clearfix {
+  &::after {
+    content: '';
+    height: 0;
+    display: block;
+    clear: both;
+  }
+}
+
+header.top-header {
+  height: $length-header-height;
+  border-bottom: 1px solid #eee;
+
+  // 하위 nav, .header-menu, li, li > a 요소가 전부 같은 height를 갖도록 함
+  > nav {
+    height: $length-header-height;
+    > .header-menu {
+      height: $length-header-height;
+
+      // ListItem들은 float: left속성으로 가로 정렬
+      // line-height와 height를 같게하여 수직 정렬
+      li {
+        height: $length-header-height;
+        line-height: $length-header-height;
+        float: left;
+
+        // 로고 이미지 위치는 수동으로 조절
+        .img-logo {
+          margin: 16px;
+        }
+
+        // li의 자식 요소인 a들은 height값을 가지며,
+        // a요소는 원래 inline 이므로 높이 값을 갖기 위해 display 속성을 inline-block으로 변경
+        > a {
+          height: $length-header-height;
+          display: inline-block;
+
+          &:hover {
+            color: $color-bg-main-search-btn-hover;
+          }
+        }
+      }
+
+      // .header-menu.header-menu-left의 float은 left
+      &.header-menu-left {
+        float: left;
+
+        // 좌측 메뉴의 아이템들의 패딩 값을 좌우 8px로 지정
+        li {
+          padding: 0 8px;
+        }
+      }
+
+      // .header-menu.header-menu-right의 float은 right
+      &.header-menu-right {
+        float: right;
+
+        // 우측메뉴의 아이템들의 패딩 값을 좌우 8px로 지정
+        li > a {
+          padding: 0 8px;
+        }
+
+        > .right-sub-menu {
+          float: left;
+        }
+        > .header-right-menu1 {
+          margin-right: 60px;
+        }
+        > .header-right-menu2 {
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+}
+
+.main-background {
+  position: relative;
+  width: 100%;
+  height: 678px;
+  background-color: $color-bg-main-search;
+  margin-bottom: 30px;
+
+  > .main1 {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/main_background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+
+  }
+
+  > .main2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/main_slogan.png');
+    background-position: center bottom;
+    background-repeat: no-repeat;
+  }
+
+  > .search-box-wrap {
+    position: absolute;
+    width: 100%;
+    height: 110px;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+  }
+
+  > .search-form-wrap {
+    position: absolute;
+    bottom: 0;
+    // left: calc(50% - (434px + 100px) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+    height: 110px;
+    padding-top: 30px;
+    box-sizing: border-box;
+
+    > input, button {
+      float: left;
+      height: 50px;
+      border: none;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    > input {
+      width: 434px;
+      padding: 0 20px;
+      font-size: 14px;
+      line-height: 50px;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    > button {
+      width: 100px;
+      font-size: 15px;
+      background-color: $color-bg-main-search-btn;
+      color: #fff;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      cursor: pointer;
+      transition-duration: 0.2s;
+
+      &:hover {
+        background-color: $color-bg-main-search-btn-hover;
+      }
+    }
+  }
+}
+
+.theme-search-container {
+  width: 960px;
+  margin: 0 auto;
+  margin-bottom: 120px;
+
+  > header {
+    text-align: center;
+  }
+
+  .theme-list {
+    .theme-item {
+      width: 300px;
+      height: 300px;
+      float: left;
+      margin-bottom: 30px;
+      box-sizing: border-box;
+      overflow: hidden;
+
+      &:nth-child(3n-1) {
+        margin: 0 30px;
+      }
+
+      > a {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+
+        > * {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+        }
+
+        > .img-bg {
+          height: 100%;
+          transition: 0.3s;
+
+          &.pet {
+            background-image: url('../images/pet.jpg')
+          }
+          &.guarantee {
+            background-image: url('../images/guarantee.jpg')
+          }
+          &.pano {
+            background-image: url('../images/pano.jpg')
+          }
+          &.parking {
+            background-image: url('../images/parking.jpg')
+          }
+          &.direct {
+            background-image: url('../images/direct.jpg')
+          }
+          &.officetel {
+            background-image: url('../images/officetel.jpg')
+          }
+        }
+
+        > .mask {
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        > .text-container {
+          color: white;
+          text-align: center;
+
+          padding: 0 10%;
+          box-sizing: border-box;
+
+          // top과 transform을 사용해 vertical-align middle조정
+          top: 50%;
+          transform: translateY(-50%);
+
+          // display: table과 하위요소를 table-cell로 조정하여 vertical-align middle조정
+          display: table;
+
+          // height: 100%는 table로 display속성을 정할때만 필요
+          height: 100%;
+
+          > .cell {
+            // 부모요소의 display속성이 table일 경우,
+            // 하위요소가 table-cell display속성을 가지며
+            // vertical-align: middle인 경우
+            // 부모요소에 맞추어 자식요소의 상하에
+            // 동일한 크기의 패딩이 생성되어 수직중앙정렬이 된다.
+            display: table-cell;
+            vertical-align: middle;
+          }
+
+          > hr.theme-item-line {
+            width: 20%;
+          }
+        }
+
+        &:hover {
+          > .img-bg {
+            transform: scale(1.2);
+          }
+        }
+      }
+    }
+  }
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 50px;
+
+  > .banner-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/banner_bg.png');
+  }
+
+  > .banner-bg-2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url('../images/banner_bg_2.png');
+  }
+}
+
+.sitemap-wrapper {
+  width: 960px;
+  height: 268px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+
+  .sitemap-item {
+    float: left;
+    line-height: 1.7em;
+    width: calc(960px / 5);
+  }
+}
+
+.term {
+  border: {
+    top: 1px solid #d1d1d1;
+    bottom: 1px solid #d1d1d1;
+  }
+
+  .terms {
+    width: 960px;
+    height: 100%;
+    margin: 0 auto;
+
+    .terms-wrapper {
+      height: 51px;
+      line-height: 51px;
+      text-align: center;
+
+      .terms-item {
+        li {
+          float: left;
+          width: calc(100% / 7);
+          height: 100%;
+          border-right: 1px solid #d1d1d1;
+          box-sizing: border-box;
+
+          a {
+            display: block;
+            width: 100%;
+            height: 100%;
+          }
+
+          &:hover {
+            background-color: #e7e7e7;
+          }
+
+          &:first-child {
+            border-left: 1px solid #d1d1d1;
+          }
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  width: 100%;
+  height: 268px;
+  background-color: #2a2a2a;
+
+   .footer-info {
+    width: 960px;
+    height: 268px;
+    margin: 0 auto;
+    padding-top: 93px;
+    position: relative;
+    font-size: 13px;
+    box-sizing: border-box;
+
+     .footer-logo {
+      width: 98px;
+      height: 88px;
+      background-image: url('../images/footer_logo.png');
+      float: left;
+    }
+
+     .footer-wrap {
+      margin-left: 45px;
+      float: left;
+      color: #919191;
+      line-height: 1.5;
+
+       .footer-1 {
+        width: 288px;
+        height: 130px;
+        display: inline-block;
+        vertical-align: bottom;
+        line-height: 2;
+
+         li > em {
+          color: #fff;
+          font-weight: bold;
+          font-style: normal;
+        }
+      }
+
+       .footer-2 {
+        width: 323px;
+        height: 104px;
+        line-height: 2;
+        display: inline-block;
+        vertical-align: bottom;
+      }
+
+      .footer-3 {
+        width: 196px;
+        height: 90px;
+        display: inline-block;
+        line-height: 1.8;
+
+        .sns {
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .main-background {
+    height: 400px;
+
+    .main1 {
+      background-size: cover;
+    }
+    .main2 {
+      background-size: contain;
+    }
+    .search-box-wrap {
+      height: 60px;
+    }
+    .search-form-wrap {
+      height: 60px;
+      > input {
+        width: 200px;
+        height: 25px;
+        line-height: 30px;
+        font-size: 10px;
+      }
+      > button {
+        width: 80px;
+        height: 30px;
+        font-size: 10px;
+      }
+    }
+  }
+  .theme-search-container {
+    .theme-item-list {
+      .theme-item {
+        width: 32%;
+
+        &:nth-of-type(3n-1) {
+          margine: 0 2%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .main-background {
+    height: 200px;
+  }
+}
