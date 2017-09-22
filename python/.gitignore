@@ -1,5 +1,8 @@
 lecture/
 .idea/
+crawler_practice.py
+utils_practice.py
+test.py
 
 # Created by https://www.gitignore.io/api/macos,python,virtualenv
 

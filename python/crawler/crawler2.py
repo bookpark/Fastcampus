@@ -1,20 +1,38 @@
 import pickle
 
 import os
+from urllib.parse import urlparse, parse_qs
 
 import requests
+from bs4 import BeautifulSoup
 
 import utils
 
 
 class NaverWebtoonCrawler():
-    def __init__(self, webtoon_id):
+    def __init__(self, webtoon_title=None):
+        """
+        1. webtoon_title이 주어지면
+            1-1. 해당 웹툰 검색결과를 가져옴
+            1-2. 검색결과가 1개면 해당 웹툰을
+                    self.webtoon에 할당
+            1-3. 검색결과가 2개 이상이면 선택가능하도록 목록을 보여주고
+                    input으로 입력받음
+            1-4. 검색결과가 없으면 다시 웹툰을 검색하도록 함
+
+        2. webtoon_title이 주어지지 않으면
+            2-1. 웹툰 검색을 할 수 있는 input을 띄워줌
+            2-2. 이후는 위의 1-2, 1-3을 따라감
+
+        3. webtoon_id를 쓰던 코드를 전부 수정 (self.webtoon 사용
+            self.webtoon은 Webtoon타입 namedtuple
+        시작하자마자 웹툰을 선택하도록 함
+        """
         self.webtoon_id = webtoon_id
         self.episode_list = list()
         # 객체 생성 시, 'db/{webtoon)id}.txt'파일이 존재하면
         # 바로 load() 해 오도록 작성
         self.load(init=True)
-
 
     @property
     def total_episode_count(self):
@@ -25,7 +43,6 @@ class NaverWebtoonCrawler():
         """
         el = utils.get_webtoon_episode_list(self.webtoon_id)
         return int(el[0].no)
-
 
     @property
     def up_to_date(self):
@@ -52,6 +69,46 @@ class NaverWebtoonCrawler():
         # return cur_episode_count == total_episode_count
         return len(self.episode_list) == self.total_episode_count
 
+    def find_webtoon(self, title):
+        """
+        :param title:
+        :return:
+        """
+        # results = []
+        # for webtoon in self.get_webtoon_list():
+        #     if title in webtoon.title:
+        #         results.append(webtoon)
+        # return results
+        return [webtoon for webtoon in self.get_webtoon_list() if title in webtoon.title]
+
+    def get_webtoon_list(self):
+        """
+        네이버웹툰의 모든 웹툰들을 가져온다
+        :return:
+        """
+        url = 'http://comic.naver.com/webtoon/weekday.nhn'
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'lxml')
+        webtoon_list = set()
+
+        daily_all = soup.select_one('.list_area.daily_all')
+        days = daily_all.select('div.col')
+        for day in days:
+            items = day.select('li')
+            for item in items:
+                img_url = item.select_one('div.thumb').a.img['src']
+                title = item.select_one('a.title').get_text(strip=True)
+
+                url_webtoon = item.select_one('a.title')['href']
+                parse_result = urlparse(url_webtoon)
+                queryset = parse_qs(parse_result.query)
+                title_id = queryset['titleId'][0]
+
+                webtoon = utils.Webtoon(title_id=title_id, img_url=img_url, title=title)
+                webtoon_list.add(webtoon)
+
+        webtoon_list = sorted(list(webtoon_list), key=lambda webtoon: webtoon.title)
+        return webtoon_list
 
     def update_episode_list(self, force_update=False):
         """
@@ -93,12 +150,10 @@ class NaverWebtoonCrawler():
         self.episode_list = new_list + self.episode_list
         return len(new_list)
 
-
     def get_last_page_episode_list(self):
         el = utils.get_webtoon_episode_list(self.webtoon_id, 99999)
         self.episode_list = el
         return len(self.episode_list)
-
 
     def save(self):
         """
@@ -127,7 +182,6 @@ class NaverWebtoonCrawler():
         except IOError:
             print('저장에 실패하였습니다')
 
-
     def load(self, path=None, init=False):
         """
         현재 폴더를 기준으로 db/<webtoon_id>.txt 파일의 내용을 불러와
@@ -144,7 +198,6 @@ class NaverWebtoonCrawler():
         except FileNotFoundError:
             if not init:
                 print('불러올 파일이 없습니다')
-
 
     def save_list_thumbnail(self):
         """
@@ -207,6 +260,7 @@ class NaverWebtoonCrawler():
             f.write(utils.LIST_HTML_BOTTOM)
 
         return filename
+
 
 if __name__ == '__main__':
     crawler = NaverWebtoonCrawler(696617)

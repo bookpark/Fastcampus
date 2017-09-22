@@ -5,8 +5,9 @@ from urllib.parse import urlparse, parse_qs
 from bs4 import BeautifulSoup
 
 Episode = namedtuple('Episode', ['no', 'img_url', 'title', 'rating', 'created_date'])
+Webtoon = namedtuple('Webtoon', ['title_id', 'img_url','title'])
+
 webtoon_p = 696617
-webtoon_g = 557672
 
 
 LIST_HTML_TOP = '''<html>
@@ -28,8 +29,6 @@ LIST_HTML_TOP = '''<html>
         .table>thead>tr>td, .table>thead>tr>th {
             height: 20px;
             line-height: 20px;
-            text-align: center;
-        .table>thead {
             text-align: center;
         }
     </style>
