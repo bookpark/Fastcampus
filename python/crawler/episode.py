@@ -20,18 +20,10 @@ class Episode:
 
         self.thumbnail_dir = f'webtoon/{self.webtoon.title_id}_thumbnail'
         self.image_dir = f'webtoon/{self.webtoon.title_id}_images/{self.no}'
-        self.episode_dir = f'webtoon/{self.webtoon.title_id}'
+        # ex) webtoon/669233_images/1/01.jpg
+        # ex) webtoon/669233_images/1/02.jpg
+        # ex) webtoon/669233_images/1/03.jpg
         self.save_thumbnail()
-
-    @property
-    def has_thumbnail(self):
-        """
-        현재 경로/webtoon/{self.webtoon.title_id}_thumbnail/{self.no}.jpg
-            파일이 있는지 검사 후 리턴
-        :return:
-        """
-        filepath = f'webtoon/{self.webtoon.title_id}_thumbnail/{self.no}.jpg'
-        return os.path.exists(filepath)
 
     @property
     def webtoon(self):
@@ -82,9 +74,14 @@ class Episode:
                 with open(filepath, 'wb') as f:
                     f.write(response.content)
 
-    def save_images(self):
+    def save_contents(self):
         """
-        자기 자신 페이지 (각 episode 페이지)의 img들을 다운로드
+        :return:
+        """
+
+    def _save_images(self):
+        """
+        자기자신 페이지 (각 episode페이지)의 img들을 다운로드
         webtoon
             /{self.webtoon.title_id}_images
                 /{self.episode.no}
@@ -92,48 +89,41 @@ class Episode:
         :return:
         """
         os.makedirs(self.image_dir, exist_ok=True)
+
         # 웹툰 본문 페이지 (url_contents)
         params = {
             'titleId': self.webtoon.title_id,
             'no': self.no
         }
-        url_contents = 'https://comic.naver.com/webtoon/detail/nhn' \
+        url_contents = 'http://comic.naver.com/webtoon/detail.nhn?'\
                        + urlencode(params)
-        # url_image_list를 가져오는건 위 URL로의 requests.get결과를 bs4로 파싱
+        # 본문 페이지에 대한 HTTP요청 응답
         response = requests.get(url_contents)
+        # 응답의 text를 이용해 Soup객체 생성
         soup = BeautifulSoup(response.text, 'lxml')
+        # soup객체에서 img tag들의 목록을 찾아내기
         img_list = soup.select_one('.wt_viewer').find_all('img')
-        url_image_list = [img['src'] for img in img_list]
+        # img tag들에서 'src'속성만 가져와 url_img_list리스트를 생성
+        url_img_list = [img['src'] for img in img_list]
 
-        for index, url in enumerate(url_image_list):
-            # img에 대한 각 requests.get에는 url_contents가 Referer인 header가
+        # 리스트를 순회하며 (각 item은 img의 src가 된다)
+        for index, url in enumerate(url_img_list):
+            # img에 대한 각 requests.get에는 url_contents가 Referer인 header가 필요
             headers = {
                 'Referer': url_contents
             }
-            response = requests.get(url,)
+            # requests.get요청을 보냄
+            response = requests.get(url, headers=headers)
+            # 파일을 저장
             with open(f'{self.image_dir}/{index + 1}.jpg', 'wb') as f:
                 f.write(response.content)
 
     def _make_html(self):
-        detail_html = open('html/detail_html.html', 'rt').read()
-        detail_html = detail_html.replace(
-            '*titlt*', '%s - %s' % (self.webtoon.title, self.title)
-        )
-
-        # *contents* 부분을 대체할 HTML 문자열
-        img_list_html = ''
-        # self.image_dir 내부에 있는 모든 파일을 순회하며
-        for file in os.listdir(self.image_dir):
-            # img 태그를 생성
-            cur_img_tag = '<img src="%s%s">' % (self.image_dir, file)
-            img_list_html += cur_img_tag
-
-        detail_html = detail_html.replace('*contents*', img_list_html)
-        with open(f'webtoon/{self.webtoon.title_id}/{self.no}.html', 'wt') as f:
-            f.write(detail_html)
+        if not os.path.isdir(f'webtoon/{self.webtoon.title_id}'):
+            os.mkdir(f'webtoon/{self.webtoon.title_id}')
 
 
 if __name__ == '__main__':
-    el = pickle.load(open('db/697680.txt', 'rb').read())
+    el = pickle.load(open('db/696617.txt', 'rb'))
     e = el[0]
-    e._save_images
+    e._save_images()

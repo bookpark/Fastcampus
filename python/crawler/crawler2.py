@@ -294,4 +294,3 @@ class NaverWebtoonCrawler:
 
 if __name__ == '__main__':
     crawler = NaverWebtoonCrawler('피에는')
-    crawler.make_list_html()
