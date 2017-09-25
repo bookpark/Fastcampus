@@ -20,6 +20,7 @@ class Episode:
 
         self.thumbnail_dir = f'webtoon/{self.webtoon.title_id}_thumbnail'
         self.image_dir = f'webtoon/{self.webtoon.title_id}_images/{self.no}'
+        self.episode_dir = f'webtoon/{self.webtoon.title_id}'
         self.save_thumbnail()
 
     @property
@@ -114,10 +115,25 @@ class Episode:
                 f.write(response.content)
 
     def _make_html(self):
-        pass
+        detail_html = open('html/detail_html.html', 'rt').read()
+        detail_html = detail_html.replace(
+            '*titlt*', '%s - %s' % (self.webtoon.title, self.title)
+        )
+
+        # *contents* 부분을 대체할 HTML 문자열
+        img_list_html = ''
+        # self.image_dir 내부에 있는 모든 파일을 순회하며
+        for file in os.listdir(self.image_dir):
+            # img 태그를 생성
+            cur_img_tag = '<img src="%s%s">' % (self.image_dir, file)
+            img_list_html += cur_img_tag
+
+        detail_html = detail_html.replace('*contents*', img_list_html)
+        with open(f'webtoon/{self.webtoon.title_id}/{self.no}.html', 'wt') as f:
+            f.write(detail_html)
 
 
 if __name__ == '__main__':
     el = pickle.load(open('db/697680.txt', 'rb').read())
     e = el[0]
-    e._save_images()
+    e._save_images
