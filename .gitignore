@@ -1,5 +1,6 @@
 blog/
 django/
 .idea/
+deploy/
 *.DS_Store
 .DS_Store
