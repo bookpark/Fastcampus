@@ -3,5 +3,6 @@ django/
 .idea/
 deploy/
 front/
+monaegi/
 *.DS_Store
 .DS_Store
